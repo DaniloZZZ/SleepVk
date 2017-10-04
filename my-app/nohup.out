@@ -1,0 +1,96 @@
+Server lisetening in port 4568
+Giving users data
+Giving users data
+Giving users data
+[ <18071208 empty items>,
+  [],
+  <17438604 empty items>,
+  [],
+  <96458445 empty items>,
+  [] ]
+Giving users data
+[ <18071208 empty items>,
+  [],
+  <17438604 empty items>,
+  [],
+  <96458445 empty items>,
+  [],
+  { date: 2017-10-03T21:20:36.122Z,
+    records: [ [Object], [Object], [Object] ] } ]
+Giving users data
+Giving users data
+Giving users data
+Giving users data
+Giving users data
+Giving users data
+Giving users data
+Giving users data
+writing data to file9m-3d.json. length 0
+
+> vksleep@0.1.0 start /home/jill/SleepVk/my-app
+> react-scripts start
+
+
+> vksleep@0.1.0 start /home/jill/SleepVk/my-app
+> react-scripts start
+
+Starting the development server...
+
+Compiled with warnings.
+
+./src/Stats.js
+  Line 2:    'ReactDOM' is defined but never used             no-unused-vars
+  Line 3:    'Lconst' is defined but never used               no-unused-vars
+  Line 3:    'Legend' is defined but never used               no-unused-vars
+  Line 3:    'ResponsiveContainer' is defined but never used  no-unused-vars
+  Line 5:    'Button' is defined but never used               no-unused-vars
+  Line 13:   Expected '!==' and instead saw '!='              eqeqeq
+  Line 28:   Expected '!==' and instead saw '!='              eqeqeq
+  Line 31:   Expected '===' and instead saw '=='              eqeqeq
+  Line 49:   Don't make functions within a loop               no-loop-func
+  Line 55:   Don't make functions within a loop               no-loop-func
+  Line 103:  Expected '!==' and instead saw '!='              eqeqeq
+
+./src/App.js
+  Line 2:   'ReactDOM' is defined but never used                                                                       no-unused-vars
+  Line 3:   'request' is defined but never used                                                                        no-unused-vars
+  Line 6:   'Button' is defined but never used                                                                         no-unused-vars
+  Line 20:  'Data' is assigned a value but never used                                                                  no-unused-vars
+  Line 28:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 69:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+
+> vksleep@0.1.0 start /home/jill/SleepVk/my-app
+> react-scripts start
+
+Starting the development server...
+
+Compiled with warnings.
+
+./src/Stats.js
+  Line 2:    'ReactDOM' is defined but never used             no-unused-vars
+  Line 3:    'Lconst' is defined but never used               no-unused-vars
+  Line 3:    'Legend' is defined but never used               no-unused-vars
+  Line 3:    'ResponsiveContainer' is defined but never used  no-unused-vars
+  Line 5:    'Button' is defined but never used               no-unused-vars
+  Line 13:   Expected '!==' and instead saw '!='              eqeqeq
+  Line 28:   Expected '!==' and instead saw '!='              eqeqeq
+  Line 31:   Expected '===' and instead saw '=='              eqeqeq
+  Line 49:   Don't make functions within a loop               no-loop-func
+  Line 55:   Don't make functions within a loop               no-loop-func
+  Line 103:  Expected '!==' and instead saw '!='              eqeqeq
+
+./src/App.js
+  Line 2:   'ReactDOM' is defined but never used                                                                       no-unused-vars
+  Line 3:   'request' is defined but never used                                                                        no-unused-vars
+  Line 6:   'Button' is defined but never used                                                                         no-unused-vars
+  Line 20:  'Data' is assigned a value but never used                                                                  no-unused-vars
+  Line 28:  Expected '===' and instead saw '=='                                                                        eqeqeq
+  Line 69:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
