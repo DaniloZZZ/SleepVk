@@ -11,7 +11,7 @@ import registerServiceWorker from './registerServiceWorker';
 
 
 var Data = new DataProvider()
-Data.load.then(render)
+Data.load.then(()=>{render();Data.initStats()})
 var user_picked = {
     "id": 131968259,
     "first_name": "Данил",
@@ -33,7 +33,6 @@ ReactDOM.render(
         </div>
         <div className="col-lg-8">
             <StatsPad user={user_picked} data={Data}/>
-            {user_picked.id}
             </div>
         </div>
     </ThemeProvider>
@@ -43,6 +42,6 @@ registerServiceWorker();
 
 function updateStats(user){
     user_picked = user;
-    console.log("updating",user_picked)
+    console.log("U1 updating",user_picked)
     render();
 }

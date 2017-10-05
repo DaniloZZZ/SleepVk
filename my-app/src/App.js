@@ -16,11 +16,9 @@ export class ChooseUser extends React.Component {
         console.log(this.users)
     }
     componentWillMount(){
-        var Data = new DataProvider()
     }
     Data = new DataProvider()
     state = { value: 1 }
-    
 
     handleChange = (val) => {
         this.setState({ value: val })
@@ -102,8 +100,6 @@ class SideBar extends Component {
             <div className="desc">
                 <h3>A simple site to track how u and ur friends sleep</h3>
             </div>
-            <Button label="ChangeState" onClick={this.update}/>
-            <p>Value {this.state.tvalue},</p>
             <ChooseUser changedCallback={this.props.onUserPicked} users={this.props.data.users}/>
         </div>
       </div>

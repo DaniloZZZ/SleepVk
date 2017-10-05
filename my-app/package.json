@@ -9,7 +9,8 @@
     "react-scripts": "1.0.14",
     "react-toolbox": "^2.0.0-beta.12",
     "react-toolbox-themr": "^1.0.2",
-    "recharts": "^1.0.0-apha.5"
+    "recharts": "^1.0.0-apha.5",
+    "webpack": "^3.6.0"
   },
   "scripts": {
     "start": "react-scripts start",

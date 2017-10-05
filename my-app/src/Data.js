@@ -1,29 +1,25 @@
 import request from 'request'
+import React,{Component} from 'react';
 
-function getSleep(endpiont){
-    var API_URL = "http://cotr.me:4568/vk/"
-    return new Promise((resolve, reject) => {
-        request({ headers: { origin: "http://cotr.me:3000" }, url: API_URL + endpiont }, function (err, res, body) {
-            // Make an http to search api
-            if (err) { reject(err); }
-            else {
-                // parse response
-                var answ = JSON.parse(body);
-                if (answ.error == null) {
-                    // if request succesfull, resolve promice with _items_ of search
-                    resolve(answ);
-                } else {
-                    // if api returned an error, reject promice
-                    reject(answ.error);
-                }
-            }
-        })
-    })
-}
 export default class DataProvider {
-    users = []
-    Stats = new StatisticsExtractor()
-    records = []
+    constructor(ts){
+        if (ts!= undefined ){
+            if (ts.length != 5) {
+                throw new Error("Timespan map must be array 5 elements long. Not this:",ts)
+            }
+            let now = new Date()
+            this.lower = new Date(now.getFullYear() - ts[0],
+                now.getMonth() - ts[1],
+                now.getDate() - ts[2],
+                now.getHours() - ts[3],
+                now.getMinutes() - ts[4])
+            this.upper = now
+        //this.initStats = this.initStats.bind(this)
+        }
+    }
+    
+    upper  = new Date()
+    lower = new Date().setDate(this.upper.getDate()-1)
 
     load =getSleep('records')
         .then(records => {
@@ -32,32 +28,97 @@ export default class DataProvider {
         })
         .then(()=>{return getSleep('users')})
         .then(users => {
-            this.users = users.map((u, i) => { u['value'] = i; return u });
-            console.log("got Users",this.users)
-        })
+            if (typeof(users.map) != 'undefined' ) {
+                this.users = users.map((u, i) => { u['value'] = i; return u });
+                console.log("got Users", this.users)
+            }
+            else{
+                console.log("Returned not an array",users)
+            }
+        }).then(()=>{this.initStats()})
+
+    initStats() {
+        if (this.records != undefined) {
+            this.Stats = new StatisticsExtractor(this.records)
+            return this.Stats
+        } else {
+            console.log("trying to extract stats without data")
+        }
+    }
 
     get_users() {
         return this.users;
     }
-    get_records() {
-        return this.records;
+    getUserRecords(user) {
+        console.log("from getUsrRecs: DataProvider.recs",this.records)
+        if (this.records != undefined) {
+            this.Stats.user_id = user.id;
+            return this.Stats.summarizeData(this.lower,this.upper)
+        } else {
+            console.log("trying to extract stats without data")
+        }
+    }
+}
+
+class StatisticsExtractor {
+    constructor(data){
+        this.data = data
     }
 
-}
-class StatisticsExtractor {
-    constructor(){
-        
-        let upper = new Date(2017,9,5)
-        console.log(upper)
-        console.log(this.niceSplit(new Date(2017,9,25).getTime(),upper.getTime(),5))
-    }
-    
+    MINUTES_BETWEEN=5
+    valueKey ='online'
+    labelKey = 'date'
+    user_id = 131968259
+    pointsCount  = 10
     ordersBase={
         'minute': [5, 10, 15, 20, 30],
         'hour': [1, 2, 3, 4, 6, 8, 12],
         'day': [1, 3, 5, 7, 14],
         'month': [1, 2,3, 6],
         'year':[1,3]
+    }
+
+    extractUser(user_id){
+        return this.data.map(d=>{
+            let user = d.records.filter(u => u.id == user_id)[0]
+            return {
+                [this.valueKey]: user[this.valueKey],
+                [this.labelKey]: d[this.labelKey]
+            }
+        })
+    }
+
+    summarizeData(lower,upper){
+        var uData = this.extractUser(this.user_id)
+        var labelAr = uData.map(d=>d[this.labelKey])
+        var valueAr = uData.map(d => d[this.valueKey])
+        var len = labelAr.length
+        console.log("Summarizing",lower,upper)
+        var lower = lower ? lower : new Date(labelAr[0]).getTime()
+        var upper = upper ? upper : new Date(labelAr[len - 1]).getTime()
+
+        var points = this.niceSplit(lower,upper,this.pointsCount)
+        var summary = []
+        let n = 0
+        points.forEach((p,i)=>{
+            let p1 = points[i]
+            let p2 = points[(i+1)]
+            let sum = 0
+            let nthDate = new Date(labelAr[n])
+            while(nthDate<p2){
+                nthDate = new Date(labelAr[n])
+                sum+=valueAr[n]
+                n++
+            }
+            summary[i] =sum*this.MINUTES_BETWEEN
+        })
+
+        return summary.map((v, i) => {
+            return {
+                [this.labelKey]: points[i],
+                [this.valueKey]: summary[i]
+            }
+        })
     }
 
     composeOrders() {
@@ -72,7 +133,6 @@ class StatisticsExtractor {
         })
         return orders
     }
-
 
     niceSplit(lower, upper, max_nums) {
         //swap datas if incorrect order
@@ -149,6 +209,27 @@ class StatisticsExtractor {
     }
 }
 
+function getSleep(endpiont){
+    var HOSTNAME = window.location.host.slice(-1)
+    var API_URL = "http://"+"cotr.me"+":4568/vk/"
+    return new Promise((resolve, reject) => {
+        request({ headers: { origin: "http://"+HOSTNAME+":3000" }, url: API_URL + endpiont }, function (err, res, body) {
+            // Make an http to search api
+            if (err) { reject(err); }
+            else {
+                // parse response
+               var answ = JSON.parse(body);
+                if (answ.error == null) {
+                    // if request succesfull, resolve promice with _items_ of search
+                    resolve(answ);
+                } else {
+                    // if api returned an error, reject promice
+                    reject(answ.error);
+                }
+            }
+        })
+    })
+}
 function hvs(a){
     // A Heaviside
     if(a>=0){
