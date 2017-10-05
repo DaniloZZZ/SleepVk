@@ -14,13 +14,12 @@ export class ChooseUser extends React.Component {
         super()
         this.users = props.users
         console.log(this.users)
-        this.state = {value:1 }
     }
     componentWillMount(){
         var Data = new DataProvider()
     }
     Data = new DataProvider()
-    state = { value: 17876798 }
+    state = { value: 1 }
     
 
     handleChange = (val) => {
@@ -76,11 +75,24 @@ export class ChooseUser extends React.Component {
 }
 
 class SideBar extends Component {
+    constructor(){
+        super()
+        this.update = this.update.bind(this)
+    }
     style={
         margin:'10px',
         marginTop:'20px',
         backgroundColor:'f8f8fe',
         height:'100%'
+    }
+    state ={tvalue:"Not init"}
+    update (){
+        console.log("Updating")
+        this.setState({
+                tvalue:String(new Date())
+            })
+
+        console.log("updated",this.state)
     }
   render() {
     return (
@@ -90,6 +102,8 @@ class SideBar extends Component {
             <div className="desc">
                 <h3>A simple site to track how u and ur friends sleep</h3>
             </div>
+            <Button label="ChangeState" onClick={this.update}/>
+            <p>Value {this.state.tvalue},</p>
             <ChooseUser changedCallback={this.props.onUserPicked} users={this.props.data.users}/>
         </div>
       </div>

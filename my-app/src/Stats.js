@@ -50,7 +50,6 @@ export default class StatsPad extends React.Component{
                 var date = new Date(r.date).getTime()
                 return (date>=date1&&date<date2)
             })
-            console.log("in_hour",in_hour)
             var sum = 0
             in_hour.forEach((stat)=>{
                 sum+=stat.online * this.MINUTES_BETWEEN

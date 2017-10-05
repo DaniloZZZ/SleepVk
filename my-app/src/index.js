@@ -31,13 +31,13 @@ ReactDOM.render(
             <div className="col-md-4">
         <SideBar onUserPicked={updateStats} data={Data}/>
         </div>
-
         <div className="col-lg-8">
             <StatsPad user={user_picked} data={Data}/>
             {user_picked.id}
             </div>
         </div>
     </ThemeProvider>
+    
 , document.getElementById('root'));}
 registerServiceWorker();
 
