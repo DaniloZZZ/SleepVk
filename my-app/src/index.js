@@ -11,7 +11,12 @@ import registerServiceWorker from './registerServiceWorker';
 
 
 var Data = new DataProvider()
-Data.load.then(()=>{render();Data.initStats()})
+Data.loadUsers().then(()=>{
+    console.log("index: DataLoaded, rendering ...")
+    render();
+    console.log("index: rendered. Initing Stats of Provider")
+    Data.initStats()
+})
 var user_picked = {
     "id": 131968259,
     "first_name": "Данил",
@@ -24,16 +29,21 @@ var user_picked = {
     "verified": 0
     };
 
+var mainS={
+    margin:'0px 32px 0px 0px'
+}
 function render(){
 ReactDOM.render(
     <ThemeProvider theme={theme}>
+        <div style={mainS} className="main">
         <div className="row">
-            <div className="col-md-4">
+            <div className="col-lg-3 col-md-4 col-sm-6">
         <SideBar onUserPicked={updateStats} data={Data}/>
         </div>
-        <div className="col-lg-8">
-            <StatsPad user={user_picked} data={Data}/>
+        <div className="col-lg-9 col-md-8 col-sm-6">
+            <StatsPad user={user_picked}/>
             </div>
+        </div>
         </div>
     </ThemeProvider>
     
@@ -42,6 +52,6 @@ registerServiceWorker();
 
 function updateStats(user){
     user_picked = user;
-    console.log("U1 updating",user_picked)
+    console.log("index:U1 updating new user:",user_picked)
     render();
 }

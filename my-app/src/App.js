@@ -1,9 +1,6 @@
-import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
-import request from 'request';
+import React,{Component} from 'react';
 
 import Dropdown from 'react-toolbox/lib/dropdown/Dropdown';
-import Button  from 'react-toolbox/lib/button/Button';
 import DataProvider from './Data.js'
 //import buttonTheme from 'react-toolbox/lib/button.css';
 
@@ -13,7 +10,6 @@ export class ChooseUser extends React.Component {
     constructor(props) {
         super()
         this.users = props.users
-        console.log(this.users)
     }
     componentWillMount(){
     }
@@ -22,7 +18,7 @@ export class ChooseUser extends React.Component {
 
     handleChange = (val) => {
         this.setState({ value: val })
-        this.props.changedCallback(this.users.filter(u=>u.value==val)[0])
+        this.props.changedCallback(this.users.filter(u=>u.value===val)[0])
     }
 
     render() {
@@ -78,9 +74,10 @@ class SideBar extends Component {
         this.update = this.update.bind(this)
     }
     style={
-        margin:'10px',
-        marginTop:'20px',
-        backgroundColor:'f8f8fe',
+        padding:'16px',
+        paddingTop:'24px',
+        paddingLeft:'32px',
+        backgroundColor:'#f3f8fe',
         height:'100%'
     }
     state ={tvalue:"Not init"}

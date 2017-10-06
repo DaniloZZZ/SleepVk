@@ -13,10 +13,16 @@ data_h = {}
 console.log("Server lisetening in port " + PORT);
 app.listen(PORT);
 
+try{
+     JSON.parse(fs.readFileSync('./data/users.json'))
+}
+catch (err){
+var friends = [35509813,131968259,18071208,186959066,286857904]
+}
 var job = new cronJob(' */5  * *  *  *',Main);
-job.start();
+//job.start();
 
-var saving = new cronJob('  */15 * *  *  *',handleData);
+var saving = new cronJob('  */15 * *  *  *', handleData);
 saving.start();
 const my_id =131968259
 const friend_url = "https://api.vk.com/method/friends.get"
@@ -28,7 +34,6 @@ vkRequestMaker(
 		"count":10,
 		})
 */
-var friends = [35509813,131968259,18071208]
 
 
 function Main(){
@@ -164,12 +169,12 @@ function vkRequestMaker(url, query, token) {
 }
 
 function loadlocaltoken() {
-    return fs.readFileSync('/home/jill/.vktoken').slice(0, -1).toString();
+    return fs.readFileSync('../.vktoken').slice(0, -1).toString();
 }
 
 // ***----Web Server stuff----***
 app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "http://cotr.me:3000");
+    res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
     next();
@@ -189,6 +194,7 @@ app.get('/vk/records',(req,res)=>{
     console.log("sendig records")
     res.send(JSON.stringify(data));
 })
+
 app.get('/vk/users',(req,res)=>{
     try {
         vkRequestMaker(users_get,{user_ids:friends,fields:"photo_100"}).then((users)=>{

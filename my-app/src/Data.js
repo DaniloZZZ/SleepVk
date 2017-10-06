@@ -1,57 +1,68 @@
+/*eslint eqeqeq: ["warn", "smart"]*/
+
 import request from 'request'
-import React,{Component} from 'react';
 
 export default class DataProvider {
     constructor(ts){
-        if (ts!= undefined ){
-            if (ts.length != 5) {
-                throw new Error("Timespan map must be array 5 elements long. Not this:",ts)
-            }
-            let now = new Date()
-            this.lower = new Date(now.getFullYear() - ts[0],
-                now.getMonth() - ts[1],
-                now.getDate() - ts[2],
-                now.getHours() - ts[3],
-                now.getMinutes() - ts[4])
-            this.upper = now
-        //this.initStats = this.initStats.bind(this)
+        this.timespan = ts
+        if (ts!== undefined ){
+            this.setUpper(new Date())
         }
+        console.log("condtructing new Provider with mask:",ts)
     }
     
     upper  = new Date()
     lower = new Date().setDate(this.upper.getDate()-1)
 
-    load =getSleep('records')
-        .then(records => {
-            this.records = records;
-            console.log("got records",records)
-        })
-        .then(()=>{return getSleep('users')})
-        .then(users => {
-            if (typeof(users.map) != 'undefined' ) {
-                this.users = users.map((u, i) => { u['value'] = i; return u });
-                console.log("got Users", this.users)
-            }
-            else{
-                console.log("Returned not an array",users)
-            }
-        }).then(()=>{this.initStats()})
+    loadRecords() {
+        return getSleep('records')
+            .then(records => {
+                this.records = records;
+                console.log("loadchain: got records", records.length)
+            }).then(() => { this.initStats() })
+    }
 
-    initStats() {
-        if (this.records != undefined) {
-            this.Stats = new StatisticsExtractor(this.records)
-            return this.Stats
-        } else {
-            console.log("trying to extract stats without data")
-        }
+    loadUsers() {
+        return getSleep('users')
+            .then(users => {
+                if (typeof (users.map) !== 'undefined') {
+                    this.users = users.map((u, i) => { u['value'] = i; return u });
+                    console.log("loadchain: got Users", this.users.length)
+                }
+                else {
+                    console.error("API Returned users thats not an array", users)
+                }
+            })
+    }
+
+initStats() {
+    if (this.records !== undefined) {
+        this.Stats = new StatisticsExtractor(this.records)
+        return this.Stats
+    } else {
+        console.error("trying to extract stats without data")
+    }
+}
+    setUpper(upper){
+            let ts = this.timespan
+            if (ts.length !== 5) {
+                throw new Error("Timespan map must be array 5 elements long. Not this:",ts)
+            }
+            this.lower = new Date(upper.getFullYear() - ts[0],
+                upper.getMonth() - ts[1],
+                upper.getDate() - ts[2],
+                upper.getHours() - ts[3],
+                upper.getMinutes() - ts[4])
+            this.upper = upper
+
     }
 
     get_users() {
         return this.users;
     }
     getUserRecords(user) {
-        console.log("from getUsrRecs: DataProvider.recs",this.records)
-        if (this.records != undefined) {
+        console.log("data: providing user records...")
+        if (this.records !== undefined) {
             this.Stats.user_id = user.id;
             return this.Stats.summarizeData(this.lower,this.upper)
         } else {
@@ -69,7 +80,7 @@ class StatisticsExtractor {
     valueKey ='online'
     labelKey = 'date'
     user_id = 131968259
-    pointsCount  = 10
+    pointsCount  = 24
     ordersBase={
         'minute': [5, 10, 15, 20, 30],
         'hour': [1, 2, 3, 4, 6, 8, 12],
@@ -80,7 +91,7 @@ class StatisticsExtractor {
 
     extractUser(user_id){
         return this.data.map(d=>{
-            let user = d.records.filter(u => u.id == user_id)[0]
+            let user = d.records.filter(u => u.id === user_id)[0]
             return {
                 [this.valueKey]: user[this.valueKey],
                 [this.labelKey]: d[this.labelKey]
@@ -93,18 +104,26 @@ class StatisticsExtractor {
         var labelAr = uData.map(d=>d[this.labelKey])
         var valueAr = uData.map(d => d[this.valueKey])
         var len = labelAr.length
-        console.log("Summarizing",lower,upper)
-        var lower = lower ? lower : new Date(labelAr[0]).getTime()
-        var upper = upper ? upper : new Date(labelAr[len - 1]).getTime()
+        console.log("stats: Summarizing",lower,upper)
+        lower = lower ? lower : new Date(labelAr[0]).getTime()
+        upper = upper ? upper : new Date(labelAr[len - 1]).getTime()
 
+        // Get nice splitted date points (integer weeks, days)
         var points = this.niceSplit(lower,upper,this.pointsCount)
-        var summary = []
+        var summary = [] // for resulting values array
         let n = 0
+        // going to start of desired span
+        let nthDate = new Date(labelAr[n])
+        while (nthDate < points[1]) {
+            nthDate = new Date(labelAr[n])
+            n++
+        }
+
+        // get sum of values for each splitted point
         points.forEach((p,i)=>{
-            let p1 = points[i]
             let p2 = points[(i+1)]
             let sum = 0
-            let nthDate = new Date(labelAr[n])
+            // sum data up to next point of nice split
             while(nthDate<p2){
                 nthDate = new Date(labelAr[n])
                 sum+=valueAr[n]
@@ -112,7 +131,7 @@ class StatisticsExtractor {
             }
             summary[i] =sum*this.MINUTES_BETWEEN
         })
-
+        // format to appropriate form
         return summary.map((v, i) => {
             return {
                 [this.labelKey]: points[i],
@@ -142,10 +161,9 @@ class StatisticsExtractor {
             upper = t
         }
         var lower_date= new Date(lower)
-        var best_order
         var orders = this.composeOrders()
         for (var idx in orders) {
-            var points =  new Array()
+            var points =  []
             let order = orders[idx]
             let head = lower_date
             let num = 0
@@ -174,14 +192,13 @@ class StatisticsExtractor {
                 num++;
             }
             if(!exceeded){
-               best_order = order
-               console.log("found best order",order)
+               this.best_order = order
                break;
             }
         }
         // calculate offset to closest nice point 
-        let t = best_order.type
-        let rank = best_order.rank
+        let t = this.best_order.type
+        let rank = this.best_order.rank
         let nv = Math.floor((kr(t, 4) * lower_date.getFullYear() +
                         kr(t, 3) * lower_date.getMonth() +
                         kr(t, 2) * lower_date.getDate() +
@@ -200,7 +217,6 @@ class StatisticsExtractor {
         let offset = new_lower-lower
         // return offsetted data
         if (points.length > 1) {
-            console.log(points)
             return points.map(v=>{return new Date(v.getTime()+offset)})
         }else{
             console.log("Too small data range",lower,upper)
@@ -210,8 +226,9 @@ class StatisticsExtractor {
 }
 
 function getSleep(endpiont){
+    console.log("data:Setting a request for "+endpiont)
     var HOSTNAME = window.location.host.slice(-1)
-    var API_URL = "http://"+"cotr.me"+":4568/vk/"
+    var API_URL = "http://cotr.me:4568/vk/"
     return new Promise((resolve, reject) => {
         request({ headers: { origin: "http://"+HOSTNAME+":3000" }, url: API_URL + endpiont }, function (err, res, body) {
             // Make an http to search api
