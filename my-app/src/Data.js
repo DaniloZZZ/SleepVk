@@ -91,11 +91,19 @@ class StatisticsExtractor {
 
     extractUser(user_id){
         return this.data.map(d=>{
-            let user = d.records.filter(u => u.id === user_id)[0]
+
+            let user = d.records.filter(u => u.id === user_id)
+            if(user.length>0){
             return {
                 [this.valueKey]: user[this.valueKey],
                 [this.labelKey]: d[this.labelKey]
             }
+        }else{
+            return {
+                [this.valueKey]: NaN,
+                [this.labelKey]: d[this.labelKey]
+            }
+        }
         })
     }
 
