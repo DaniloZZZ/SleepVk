@@ -4,8 +4,6 @@ import Avatar from 'react-toolbox/lib/avatar/Avatar'
 //import Button from 'react-toolbox/lib/button/Button';
 import { LineChart,Line, XAxis, YAxis, CartesianGrid, Tooltip,ResponsiveContainer} from 'recharts';
 import React,{Component} from 'react';
-import classnames from 'classnames';
-import useSheet from 'react-jss';
 
 export default class ChartCard extends Component {
     constructor(props){
