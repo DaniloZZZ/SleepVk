@@ -90,24 +90,20 @@ class StatisticsExtractor {
     }
 
     extractUser(user_id){
-        return this.data.map(d=>{
-
+        var res = []
+        this.data.forEach(d=>{
             let user = d.records.filter(u => u.id === user_id)
-            if(user.length>0){
-            return {
-                [this.valueKey]: user[this.valueKey],
-                [this.labelKey]: d[this.labelKey]
-            }
-        }else{
-            return {
-                [this.valueKey]: NaN,
-                [this.labelKey]: d[this.labelKey]
-            }
-        }
+            if (user.length > 0) {
+                res.push({
+                    [this.valueKey]: user[this.valueKey],
+                    [this.labelKey]: d[this.labelKey]
+                })
+            } 
         })
+        return res
     }
 
-    summarizeData(lower,upper){
+    summarizeData(lower, upper) {
         var uData = this.extractUser(this.user_id)
         var labelAr = uData.map(d=>d[this.labelKey])
         var valueAr = uData.map(d => d[this.valueKey])
@@ -130,7 +126,12 @@ class StatisticsExtractor {
         // get sum of values for each splitted point
         points.forEach((p,i)=>{
             let p2 = points[(i+1)]
-            let sum = 0
+            // if theres no records given timespan
+            if (nthDate < p2) {
+                let sum = 0
+            } else {
+                let sum = NaN
+            }
             // sum data up to next point of nice split
             while(nthDate<p2){
                 nthDate = new Date(labelAr[n])
