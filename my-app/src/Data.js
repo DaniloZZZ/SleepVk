@@ -130,7 +130,8 @@ class StatisticsExtractor {
             if (nthDate < p2) {
                 let sum = 0
             } else {
-                let sum = NaN
+                summary[i] = undefined;
+                break
             }
             // sum data up to next point of nice split
             while(nthDate<p2){
