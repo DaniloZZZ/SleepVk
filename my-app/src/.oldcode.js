@@ -22,3 +22,26 @@
         }
         return res
     }
+class CustomizedAxisTick extends Component {
+   /* render () {
+      const {x, y, stroke, payload} = this.props;
+          
+      var valObj = JSON.parse(payload.value)
+      console.log('payl',payload)
+      return (
+          <g transform={`translate(${x},${y})`}>
+              <text x={0} y={0} dy={16} textAnchor="end" fill="#666" transform="rotate(-10)">{valObj.time}
+                  </text>
+          </g>
+      );
+    }*/
+    render () {
+        const {x, y, stroke, payload} = this.props;
+            
+           return (
+            <g transform={`translate(${x},${y})`}>
+            <text x={0} y={0} dy={16} textAnchor="end" fill="#666" transform="rotate(-35)">{payload.value}</text>
+          </g>
+        );
+      }
+}

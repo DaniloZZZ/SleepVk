@@ -2,7 +2,7 @@ import  CardTitle  from 'react-toolbox/lib/card/CardTitle';
 import DatePicker from 'react-toolbox/lib/date_picker/DatePicker'
 import Avatar from 'react-toolbox/lib/avatar/Avatar'
 //import Button from 'react-toolbox/lib/button/Button';
-import { LineChart,Line, XAxis, YAxis, CartesianGrid, Tooltip,ResponsiveContainer} from 'recharts';
+import {Bar,BarChart, LineChart,Line, XAxis, YAxis, CartesianGrid, Tooltip,ResponsiveContainer} from 'recharts';
 import React,{Component} from 'react';
 
 export default class ChartCard extends Component {
@@ -67,15 +67,21 @@ export default class ChartCard extends Component {
     }
 
     getData(){
-        var options = {
-            weekday: 'short',
+        var timeopt = {
             hour: 'numeric',
             minute: 'numeric',
         };
+        var dateopt={
+            weekday: 'short',
+        }
         console.log("Calling getUsrRecs for user",this.props.user)
         return this.provider.getUserRecords(this.props.user).map(r => {
+            let datetme={
+                time: r.date.toLocaleString("ru-ru",timeopt),
+                date:r.date.toLocaleString("ru-ru",dateopt)
+            }
             return {
-                date: r.date.toLocaleString("ru-ru", options),
+                date:(datetme.time+", "+datetme.date),
                 online: r.online
             }
         })
@@ -120,22 +126,29 @@ export default class ChartCard extends Component {
         float:'left',
         margin:'14px'
     }
+    noDataS={
+        fontSize:'18px',
+        color:'#333',
+        margin:'48px',
+        marginLeft:'64px'
+    }
 
     render(){
+        let data = this.getData()
         console.log("Rendering Chart Card")
-        var graph = <p style={{margin:'20px'}}>No data</p>
+        var graph = <p style={this.noDataS}>No data for this period</p>
         if (this.dataLoaded) {
             console.log("U2 data in Chart Card", this.state.data)
             console.log("user in ChartCard provider", this.provider.Stats.user_id)
         } else {
             console.warn("trying to render when theres no data yet!")
         }
-        if (this.state.data !== undefined) {
+        if (data.length >0) {
             graph = (
                 <ResponsiveContainer width="100%" aspect={1.818} minHeight={100}>
                 <LineChart width={600} height={300} 
-                data={this.getData()}>
-                    <Line type="monotone" dataKey="online" stroke="#8884d8" />
+                data={data}>
+                    <Line type="monotone" dataKey="online" fill="#8884d8" />
                     <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
                     <XAxis dataKey="date" />
                     <YAxis />
@@ -144,7 +157,7 @@ export default class ChartCard extends Component {
                 </ResponsiveContainer>
             )
         }else{
-            console.error("Got wrong data type",this.state.data)
+            console.error("Got wrong data type",data)
         }
 
         return(
@@ -168,6 +181,8 @@ export default class ChartCard extends Component {
         );
     }
 }
+
+
 class DatesPicker extends React.Component {
     constructor(props){
         super()
@@ -200,7 +215,6 @@ class DatesPicker extends React.Component {
     }
 
     render() {
-        console.log("picker stae:",this.state,"picker props:",this.props)
         return (
             <div>
                 <div style={this.pickerStyle}>

@@ -64,9 +64,13 @@ initStats() {
         console.log("data: providing user records...")
         if (this.records !== undefined) {
             this.Stats.user_id = user.id;
-            return this.Stats.summarizeData(this.lower,this.upper)
+            let records = this.Stats.summarizeData(this.lower,this.upper)
+            let len = records.length ? records.length : 0
+            console.log("provided records len ", len)
+            return records
         } else {
             console.log("trying to extract stats without data")
+            return []
         }
     }
 }
@@ -92,8 +96,9 @@ class StatisticsExtractor {
     extractUser(user_id){
         var res = []
         this.data.forEach(d=>{
-            let user = d.records.filter(u => u.id === user_id)
-            if (user.length > 0) {
+            let user_found = d.records.filter(u => u.id === user_id)
+            if (user_found.length > 0) {
+                var user = user_found[0]
                 res.push({
                     [this.valueKey]: user[this.valueKey],
                     [this.labelKey]: d[this.labelKey]
@@ -118,30 +123,38 @@ class StatisticsExtractor {
         let n = 0
         // going to start of desired span
         let nthDate = new Date(labelAr[n])
-        while (nthDate < points[1]) {
+        while (nthDate < points[0]) {
             nthDate = new Date(labelAr[n])
             n++
         }
-
-        // get sum of values for each splitted point
-        points.forEach((p,i)=>{
-            let p2 = points[(i+1)]
-            // if theres no records given timespan
-            if (nthDate < p2) {
-                let sum = 0
-            } else {
-                summary[i] = undefined;
-                break
+        // find firt records excisting 
+        let idx = 0
+        while(nthDate>points[idx]){
+            summary[idx] = NaN;
+            idx++
+            // No data!
+            if(idx===points.length){
+                return []
             }
+        }
+        // if was Nan, first non-null point will display ugly like _ \._
+        if (idx > 0) {summary[idx - 1] = 0}
+        // get sum of values for each splitted point
+        for (let i=idx;i<points.length;i++){
+            let p2 = points[i]
+            // if theres no records given timespan
+            let sum =0
             // sum data up to next point of nice split
-            while(nthDate<p2){
-                nthDate = new Date(labelAr[n])
+            while(nthDate<=p2){
                 sum+=valueAr[n]
                 n++
+                nthDate = new Date(labelAr[n])
             }
             summary[i] =sum*this.MINUTES_BETWEEN
-        })
+        }
         // format to appropriate form
+        console.log(summary)
+
         return summary.map((v, i) => {
             return {
                 [this.labelKey]: points[i],
