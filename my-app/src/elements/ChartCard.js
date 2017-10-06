@@ -210,7 +210,6 @@ class DatesPicker extends React.Component {
                         inputFormat={this.formatFunc}
                         onChange={this.handleChange.bind(this, 'from')}
                         value={this.props.from}
-                        mondayFirstDayOfWeek
                     />
                 </div>
                 <div style={this.pickerStyle}>
@@ -220,7 +219,6 @@ class DatesPicker extends React.Component {
                         inputFormat={this.formatFunc}
                         onChange={this.handleChange.bind(this, 'to')}
                         value={this.props.to}
-                        mondayFirstDayOfWeek
                     />
                 </div>
             </div>
