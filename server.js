@@ -20,7 +20,7 @@ catch (err){
 var friends = [35509813,131968259,18071208,186959066,286857904]
 }
 var job = new cronJob(' */5  * *  *  *',Main);
-//job.start();
+job.start();
 
 var saving = new cronJob('  */15 * *  *  *', handleData);
 saving.start();
