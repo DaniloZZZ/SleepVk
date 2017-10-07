@@ -1,0 +1,40 @@
+.root {
+    width:30px;
+    margin-top: 36px;
+    height:60px;
+    position: absolute;
+    right: 0px;
+    top:0px;
+    transition:0.2s;
+}
+
+.icon {
+    width:30px;
+    padding: 4px;
+    background-color:#fadddd;
+}
+.root-open{
+    margin-left: 100px;
+    width: 220px;
+}
+.padh{
+    position:absolute;
+    margin-left:30px;
+    height: 70px;
+    width: 0px;
+    background-color:#fadddd;
+    transition:0.2s;
+}
+.padh-open{
+    width: 190px;
+}
+
+.pad{
+    margin-top:-10px;
+    height: 100%;
+    opacity: 0;
+    transition:0.3s 0.2s;
+}
+.pad-open{
+    opacity: 1;
+}

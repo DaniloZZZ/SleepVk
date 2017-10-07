@@ -1,0 +1,19 @@
+
+.chooser {
+    position:'absolute';
+    float:'right';
+    width:'30px';
+    height:'60px';
+    background-color:"#faddad";
+    transition:'0.2s'
+}
+
+.icon {
+    width:'30px';
+    height:'30px';
+    background-color:"#fadddd";
+}
+.chooser-open{
+    margin-right: 100px;
+
+}

@@ -4,9 +4,12 @@ import Avatar from 'react-toolbox/lib/avatar/Avatar'
 //import Button from 'react-toolbox/lib/button/Button';
 import {Bar,BarChart, LineChart,Line, XAxis, YAxis, CartesianGrid, Tooltip,ResponsiveContainer} from 'recharts';
 import React,{Component} from 'react';
-
+import TimePickerPad from './TimePicker.js'
+import * as S from './ChartCardStyle.js' 
 export default class ChartCard extends Component {
     constructor(props){
+
+        console.log("styles",S)
         super()
         this.provider = props.dataProvider
         this.user = props.user
@@ -95,48 +98,10 @@ export default class ChartCard extends Component {
         padding:'10px',
         boxShadow:' 0px 0px 34px -4px rgba(0,0,0,0.17)'
     }
-    descStyle={
-        color:'#888',
-        fontSize:'8',
-        marginLeft:'32px'
-    }
-    contentStyle={
-        margin:'5px'
-    }
-
-    pickerS={
-        height:'80%',
-        float:'left',
-        margin:'4px 8px',
-        marginLeft:'32px'
-    }
-
-    topS={
-        width:'100%',
-        height:'60px',
-        margin:'10px'
-    }
-    titleS={
-        float:'left',
-        fontSize:'24px',
-        margin:'8px',
-        marginTop:'16px'
-    }
-    avatarS={
-        float:'left',
-        margin:'14px'
-    }
-    noDataS={
-        fontSize:'18px',
-        color:'#333',
-        margin:'48px',
-        marginLeft:'64px'
-    }
-
     render(){
         let data = this.getData()
         console.log("Rendering Chart Card")
-        var graph = <p style={this.noDataS}>No data for this period</p>
+        var graph = <p style={S.noDataS}>No data for this period</p>
         if (this.dataLoaded) {
             console.log("U2 data in Chart Card", this.state.data)
             console.log("user in ChartCard provider", this.provider.Stats.user_id)
@@ -162,26 +127,69 @@ export default class ChartCard extends Component {
 
         return(
             <div className="graph" style={this.style}>
-                <div style={this.topS}>
-                    <div style={this.avatarS}><Avatar >
+                <div style={S.topS}>
+                    <div style={S.avatarS}><Avatar >
                         <img src={this.props.user.photo_100} />
                     </Avatar></div>
-                    <span style={this.titleS}>{this.getTitle()}</span>
-                    <div style={this.pickerS}><DatesPicker 
+                    <span style={S.titleS}>{this.getTitle()}</span>
+                    <div style={S.pickerS}><DatesPicker 
                     handler={this.dateChangeHandler}
                     from={this.state.fromDate}
                     to = {this.state.toDate}
                      /></div>
                 </div>
-                <div style={this.contentStyle}>
-                    <span style={this.descStyle}>{"minutes of online time during " + this.getSpan()}</span>
+                <div style={S.contentStyle}>
+                    <span style={S.descStyle}>{"minutes of online time during " + this.getSpan()}</span>
                     <div style={{marginLeft:'-28px'}}>{graph}</div>
                </div>
+                <TimePickerPad />
             </div>
         );
     }
 }
 
+/*
+class TimesPicker extends React.Component{
+    handleClick(){
+        var style=chooserS
+        if(this.opened){
+           style=
+        }
+        this.setState({
+            chooserS:style
+        })
+    }
+    chooserS={
+        position:'absolute',
+        float:'right',
+        width:'30px',
+        height:'60px',
+        transition:'0.2s'
+    }
+    chooserSOpened={
+        marginLeft:"100px"
+    }
+    iconS={
+        width:'30px',
+        height:'30px',
+        backgroundColor:"#fadddd"
+    }
+    render(){
+        return(
+            
+            <div>
+                <div style={this.state.chooserS}>
+                    <div style={this.iconS}>
+                        <img src="https://d30y9cdsu7xlg0.cloudfront.net/png/17392-200.png"></img>
+                    </div>   
+
+                </div>
+            </div>
+
+        )
+    }
+}
+*/
 
 class DatesPicker extends React.Component {
     constructor(props){

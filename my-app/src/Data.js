@@ -251,7 +251,7 @@ class StatisticsExtractor {
 function getSleep(endpiont){
     console.log("data:Setting a request for "+endpiont)
     var HOSTNAME = window.location.host.slice(-1)
-    var API_URL = "http://cotr.me:4568/vk/"
+    var API_URL = "http://localhost:4568/vk/"
     return new Promise((resolve, reject) => {
         request({ headers: { origin: "http://"+HOSTNAME+":3000" }, url: API_URL + endpiont }, function (err, res, body) {
             // Make an http to search api
