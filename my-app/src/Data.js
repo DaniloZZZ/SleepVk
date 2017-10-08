@@ -253,7 +253,7 @@ function getSleep(endpiont){
     var HOSTNAME = window.location.host.slice(-1)
     var API_URL = "http://localhost:4568/vk/"
     return new Promise((resolve, reject) => {
-        request({ headers: { origin: "http://"+HOSTNAME+":3000" }, url: API_URL + endpiont }, function (err, res, body) {
+        request({ headers: { origin: "http://localhost:3000" }, url: API_URL + endpiont }, function (err, res, body) {
             // Make an http to search api
             if (err) { reject(err); }
             else {
