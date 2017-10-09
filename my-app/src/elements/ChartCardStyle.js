@@ -2,7 +2,8 @@ module.exports={
     descStyle:{
         color:'#888',
         fontSize:'8',
-        marginLeft:'32px'
+        marginLeft:'32px',
+        display:'inline-flex',
     },
     contentStyle:{
         margin:'5px'
@@ -11,6 +12,7 @@ module.exports={
     pickerS:{
         height:'80%',
         float:'left',
+        marginTop:'16px',
         margin:'4px 8px',
         marginLeft:'32px'
     },

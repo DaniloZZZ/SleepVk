@@ -19,6 +19,7 @@ export default class ChartCard extends Component {
         this.provider = props.dataProvider
         this.user = props.user
         this.dateChangeHandler= this.dateChangeHandler.bind(this)
+        this.timeChangeHandler= this.timeChangeHandler.bind(this)
         console.log("Constuctor of ChartCard is loading data...")
         this.provider.loadRecords().then(()=>{
             this.dataLoaded = true
@@ -30,33 +31,48 @@ export default class ChartCard extends Component {
              })
         })
     }
-    componentDidMount(){
-        var vue = new Vue({
-            el:'#vu',
-            template:"<button :label=\"test\"/>",
-            data:{
-                test:"Hello from Vue!",
 
-            }
-        })
-    }
     title = "Online time"
-    
     state= {
         data:undefined
     }
+
     dateChangeHandler(item,value) {
         if(item==='from'){
-            this.provider.lower = value
+            let tim = new Date(this.state.fromDate.setMonth(value.getMonth()))
+            tim = new Date(tim.setDate(value.getDate()))
+            tim = new Date(tim.setFullYear(value.getFullYear()))
+
+            this.provider.lower = tim
             let newData = this.provider.getUserRecords(this.user)
-            this.setState({...this.state,data:newData,fromDate:value})
+            this.setState({...this.state,data:newData,fromDate:tim})
         }
         if(item==='to'){
-            this.provider.upper = value
+            let tim = new Date(this.state.toDate.setMonth(value.getMonth()))
+            tim = new Date(tim.setDate(value.getDate()))
+            this.provider.upper = tim
             let newData = this.provider.getUserRecords(this.user)
-            this.setState({...this.state,data:newData,toDate:value})
+            this.setState({...this.state,data:newData,toDate:tim})
         }
         
+    }
+
+    timeChangeHandler(item,value){
+        if(item==='from'){
+            let tim = new Date(this.state.fromDate.setHours(value.getHours()))
+            tim = new Date(tim.setMinutes(value.getMinutes()))
+            this.provider.lower = tim
+            let newData = this.provider.getUserRecords(this.user)
+            this.setState({...this.state,data:newData,fromDate:tim})
+        }
+        if(item==='to'){
+            let tim = new Date(this.state.toDate.setHours(value.getHours()))
+            tim = new Date(tim.setMinutes(value.getMinutes()))
+            this.provider.upper = tim
+            let newData = this.provider.getUserRecords(this.user)
+            this.setState({...this.state,data:newData,toDate:tim})
+        }
+        console.log('time',this.state.fromDate,this.state.toDate, item, value)
     }
 
     getSpan(){
@@ -83,6 +99,7 @@ export default class ChartCard extends Component {
             return "Loading data..."
         }
     }
+
 
     getData(){
         var timeopt = {
@@ -111,6 +128,7 @@ export default class ChartCard extends Component {
         maxWidth:'500px',
         backgroundColor:'#fafafa',
         padding:'10px',
+        position:'relative',
         boxShadow:' 0px 0px 34px -4px rgba(0,0,0,0.17)'
     }
     render(){
@@ -147,67 +165,24 @@ export default class ChartCard extends Component {
                         <img src={this.props.user.photo_100} />
                     </Avatar></div>
                     <span style={S.titleS}>{this.getTitle()}</span>
-                    <div style={S.pickerS}><DatesPicker 
-                    handler={this.dateChangeHandler}
-                    from={this.state.fromDate}
-                    to = {this.state.toDate}
+                    <div style={S.pickerS}>
+                        <DatesPicker
+                        handler={this.dateChangeHandler}
+                        from={this.state.fromDate}
+                        to={this.state.toDate}
                      /></div>
                 </div>
                 <div style={S.contentStyle}>
                     <span style={S.descStyle}>{"minutes of online time during " + this.getSpan()}</span>
                     <div style={{marginLeft:'-28px'}}>{graph}</div>
                </div>
-               <div id='vu'></div>
                <Testa/>
-               <ScrollStat style={{}}/>
-                <TimePickerPad />
+                <TimePickerPad onChange={this.timeChangeHandler}/>
             </div>
         );
     }
 }
 
-/*
-class TimesPicker extends React.Component{
-    handleClick(){
-        var style=chooserS
-        if(this.opened){
-           style=
-        }
-        this.setState({
-            chooserS:style
-        })
-    }
-    chooserS={
-        position:'absolute',
-        float:'right',
-        width:'30px',
-        height:'60px',
-        transition:'0.2s'
-    }
-    chooserSOpened={
-        marginLeft:"100px"
-    }
-    iconS={
-        width:'30px',
-        height:'30px',
-        backgroundColor:"#fadddd"
-    }
-    render(){
-        return(
-            
-            <div>
-                <div style={this.state.chooserS}>
-                    <div style={this.iconS}>
-                        <img src="https://d30y9cdsu7xlg0.cloudfront.net/png/17392-200.png"></img>
-                    </div>   
-
-                </div>
-            </div>
-
-        )
-    }
-}
-*/
 
 class DatesPicker extends React.Component {
     constructor(props){

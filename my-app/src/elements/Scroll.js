@@ -38,7 +38,6 @@ export default class ScrollStat extends Component {
             width: this.state.wid + 'px',
             backgroundColor: col,
         }
-        console.log('state.wid',style)
 
         p.push (
             <div style={s.part}>

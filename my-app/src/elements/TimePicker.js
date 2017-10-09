@@ -10,18 +10,17 @@ export default class TimePickerPad extends Component{
     state = {
         from: new Date(),
         to: new Date(),
-        closed:true,
+        open:false,
         active: false,
         classes: {
-            root: 'root',
-            padh: 'padh',
-            pad: 'pad',
+            root:S.root,
+            padh:S.padh,
+            pad:S.pad,
         }
     };
     toggleClass(classname) {
-        var suffix = "open"
-        if (this.state.closed) {
-            return [classname, [classname, suffix].join('-')].join(' ')
+        if (!this.state.open) {
+            return [classname,  ].join(' ')
         } else {
             return classname.split(' ')[0]
         }
@@ -31,19 +30,27 @@ export default class TimePickerPad extends Component{
         var keys = Object.keys(this.state.classes)
         var cls = {}
         keys.forEach(k=>{
-            cls[k]=this.toggleClass(this.state.classes[k])
+            cls[k] = this.state.open ? S[k]+' '+S[k+'-open'] : S[k]
         })
         
         this.setState({...this.state,
-            closed:!this.state.closed,
+            open:!this.state.open,
             classes:cls
         })
     } 
 
     handleChange = (item, value) => {
-        this.props.onChange(item.value)
+        this.props.onChange(item,value)
         this.setState({ ...this.state, [item]: value });
     };
+
+    getClassName(key){
+        let c =  S[key]
+        if (this.state.open)
+            return c +" "+S[key + "Open"]
+        else
+            return c
+    }
 
     chooserS={
         width:'30px',
@@ -54,28 +61,26 @@ export default class TimePickerPad extends Component{
     iconhS={
         width:'50px',
         height:'50px',
-
     }
     padS={
         padding:'4px'
     }
 
     render () {
-
         return(
             <div className={this.state.classes.root}>
                 <div className={S.chooser}>
                     <div className={S.icon} onClick={this.slideIn}>
-                        <img className="icon" src="https://d30y9cdsu7xlg0.cloudfront.net/png/17392-200.png"></img>
+                        <img className={S.img} src="https://d30y9cdsu7xlg0.cloudfront.net/png/17392-200.png"></img>
                     </div>
                 </div>
                 <div className={this.state.classes.padh}>
                     <div className={this.state.classes.pad} style={this.padS}>
                         <div className={S.pick}>
-                        <TimePicker label={'From'} onChange={this.handleChange.bind('from')} value={this.state.time1} />
+                        <TimePicker label={'From'} onChange={this.handleChange.bind(this,'from')} value={this.state.from} />
                         </div>
                         <div className={S.pick}>
-                        <TimePicker label={'To'} onChange={this.handleChange.bind('to')} value={this.state.time1} />
+                        <TimePicker label={'To'} onChange={this.handleChange.bind(this,'to')} value={this.state.to} />
                         </div>
                     </div>
                 </div>
