@@ -176,7 +176,6 @@ export default class ChartCard extends Component {
                     <span style={S.descStyle}>{"minutes of online time during " + this.getSpan()}</span>
                     <div style={{marginLeft:'-28px'}}>{graph}</div>
                </div>
-               <Testa/>
                 <TimePickerPad onChange={this.timeChangeHandler}/>
             </div>
         );
