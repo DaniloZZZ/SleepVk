@@ -1,0 +1,21 @@
+.part{
+     width:20px;
+     height:200px;
+   }
+   .con{
+     height: 200px;
+     border:1px solid;
+     width: 200px;
+     overflow:hidden;
+   }
+   .elem{
+     height:200px;
+     word-wrap:break-word
+   }
+   .holder{
+     height:220px;
+     width:200px;
+     direction:rtl;
+     overflow:auto;
+     display:inline-flex;
+   }

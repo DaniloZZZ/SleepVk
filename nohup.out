@@ -17768,3 +17768,14 @@ Record done. Data: [ { date: 2017-10-07T12:15:00.507Z,
   { date: 2017-10-07T20:30:01.087Z,
     records: [ [Object], [Object], [Object], [Object], [Object] ] },
   ... 16 more items ]
+module.js:471
+    throw err;
+    ^
+
+Error: Cannot find module '/home/fourier/SleepVk/server.js'
+    at Function.Module._resolveFilename (module.js:469:15)
+    at Function.Module._load (module.js:417:25)
+    at Module.runMain (module.js:604:10)
+    at run (bootstrap_node.js:389:7)
+    at startup (bootstrap_node.js:149:9)
+    at bootstrap_node.js:504:3

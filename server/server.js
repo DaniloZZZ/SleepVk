@@ -92,10 +92,19 @@ app.get('/vk/records',(req,res)=>{
 })
 
 app.get('/vk/users',(req,res)=>{
+    if(USERS.length>0){
+        res.send(JSON.stringify(USERS))
+        log.info("Sent users")
+    }
+    else{
+        
+    }
+})
+
+app.get('/vk/users/force updete',(req,res)=>{
     res.send(JSON.stringify(USERS))
     log.info("Sent users")
 })
-
 handleNoUsers = function(){
         log.info("Couldnt initialize users list. Serving default user ")
         USERS =  [{

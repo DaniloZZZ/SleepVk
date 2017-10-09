@@ -1,0 +1,17 @@
+
+<div id="app">
+    <div class="con">
+        <div @scroll="hadl" class="holder">
+            <div class="part" v-for="part in parts">
+                <div class="elem" v-bind:style="part.style">
+                    <div v-if="part.num==20">
+                        HAHS
+                    </div>
+                    {{part.num}}</div>
+            </div>
+        </div>
+    </div>
+    <p>{{scrl}} {{wid}}</p>
+    <input type="text" v-model:value="wid" />
+</div>
+<script src=""

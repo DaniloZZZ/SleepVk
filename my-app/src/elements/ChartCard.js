@@ -4,8 +4,10 @@ import Avatar from 'react-toolbox/lib/avatar/Avatar'
 //import Button from 'react-toolbox/lib/button/Button';
 import {Bar,BarChart, LineChart,Line, XAxis, YAxis, CartesianGrid, Tooltip,ResponsiveContainer} from 'recharts';
 import React,{Component} from 'react';
+import Vue from 'vue'
 import TimePickerPad from './TimePicker.js'
 import * as S from './ChartCardStyle.js' 
+import ScrollStat from './Scroll.js'
 export default class ChartCard extends Component {
     constructor(props){
 
@@ -25,8 +27,18 @@ export default class ChartCard extends Component {
              })
         })
     }
-    title = "Online time"
+    componentDidMount(){
+        var vue = new Vue({
+            el:'#vu',
+            template:"<button :label=\"test\"/>",
+            data:{
+                test:"Hello from Vue!",
 
+            }
+        })
+    }
+    title = "Online time"
+    
     state= {
         data:undefined
     }
@@ -142,6 +154,8 @@ export default class ChartCard extends Component {
                     <span style={S.descStyle}>{"minutes of online time during " + this.getSpan()}</span>
                     <div style={{marginLeft:'-28px'}}>{graph}</div>
                </div>
+               <div id='vu'></div>
+               <ScrollStat style={{}}/>
                 <TimePickerPad />
             </div>
         );
