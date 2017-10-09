@@ -1,6 +1,6 @@
-import  CardTitle  from 'react-toolbox/lib/card/CardTitle';
-import DatePicker from 'react-toolbox/lib/date_picker/DatePicker'
-import Avatar from 'react-toolbox/lib/avatar/Avatar'
+import  CardTitle  from 'react-toolbox/lib/card/';
+import DatePicker from 'react-toolbox/lib/date_picker/'
+import Avatar from 'react-toolbox/lib/avatar/'
 //import Button from 'react-toolbox/lib/button/Button';
 import {Bar,BarChart, LineChart,Line, XAxis, YAxis, CartesianGrid, Tooltip,ResponsiveContainer} from 'recharts';
 import React,{Component} from 'react';
@@ -8,6 +8,9 @@ import Vue from 'vue'
 import TimePickerPad from './TimePicker.js'
 import * as S from './ChartCardStyle.js' 
 import ScrollStat from './Scroll.js'
+import Testa from './test.coffee'
+//import Testa from 'coffee-loader!./test.coffee';
+
 export default class ChartCard extends Component {
     constructor(props){
 
@@ -155,6 +158,7 @@ export default class ChartCard extends Component {
                     <div style={{marginLeft:'-28px'}}>{graph}</div>
                </div>
                <div id='vu'></div>
+               <Testa/>
                <ScrollStat style={{}}/>
                 <TimePickerPad />
             </div>

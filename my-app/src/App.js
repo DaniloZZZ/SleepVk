@@ -1,6 +1,6 @@
 import React,{Component} from 'react';
 
-import Dropdown from 'react-toolbox/lib/dropdown/Dropdown';
+import Dropdown from 'react-toolbox/lib/dropdown/';
 import DataProvider from './Data.js'
 //import buttonTheme from 'react-toolbox/lib/button.css';
 

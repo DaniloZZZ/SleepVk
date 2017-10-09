@@ -1,19 +1,24 @@
 
 import React,{Component} from 'react';
-import TimePicker from 'react-toolbox/lib/time_picker/TimePicker'
+import S from './TimePicker.css'
+import TimePicker from 'react-toolbox/lib/time_picker/'
 export default class TimePickerPad extends Component{
-    constructor(){
+    constructor(props){
         super()
         this.slideIn=this.slideIn.bind(this)
     }
     state = {
-        time1:new Date(),
-        time2:new Date(),
+        from: new Date(),
+        to: new Date(),
         closed:true,
-        active:false,
-        classes:{root:'root',padh:'padh',pad:'pad'}
+        active: false,
+        classes: {
+            root: 'root',
+            padh: 'padh',
+            pad: 'pad',
+        }
     };
-    toggleClass(classname){
+    toggleClass(classname) {
         var suffix = "open"
         if (this.state.closed) {
             return [classname, [classname, suffix].join('-')].join(' ')
@@ -36,7 +41,7 @@ export default class TimePickerPad extends Component{
     } 
 
     handleChange = (item, value) => {
-        //this.props.handler(item,value)
+        this.props.onChange(item.value)
         this.setState({ ...this.state, [item]: value });
     };
 
@@ -45,11 +50,7 @@ export default class TimePickerPad extends Component{
         height:'60px',
         position:'absolute',
     }
-    pickS={
-        margin:'4px 8px',
-        width:'50px',
-        float:'left',
-    }
+
     iconhS={
         width:'50px',
         height:'50px',
@@ -63,18 +64,18 @@ export default class TimePickerPad extends Component{
 
         return(
             <div className={this.state.classes.root}>
-                <div style={this.chooserS}>
-                    <div style={this.iconhS} onClick={this.slideIn}>
+                <div className={S.chooser}>
+                    <div className={S.icon} onClick={this.slideIn}>
                         <img className="icon" src="https://d30y9cdsu7xlg0.cloudfront.net/png/17392-200.png"></img>
                     </div>
                 </div>
                 <div className={this.state.classes.padh}>
                     <div className={this.state.classes.pad} style={this.padS}>
-                        <div style={this.pickS}>
-                        <TimePicker label={'From'} onChange={this.handleChange.bind('time2')} value={this.state.time1} />
+                        <div className={S.pick}>
+                        <TimePicker label={'From'} onChange={this.handleChange.bind('from')} value={this.state.time1} />
                         </div>
-                        <div style={this.pickS}>
-                        <TimePicker active={this.state.active} onclick={()=>{this.setState({...this.state,active:true})}}label={'To'} onChange={this.handleChange.bind('time2')} value={this.state.time2} />
+                        <div className={S.pick}>
+                        <TimePicker label={'To'} onChange={this.handleChange.bind('to')} value={this.state.time1} />
                         </div>
                     </div>
                 </div>

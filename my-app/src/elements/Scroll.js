@@ -23,7 +23,7 @@ export default class ScrollStat extends Component {
     }
     
     scale(){
-        this.setState({divs})
+        console.log(this.state.wid)
     }
 
     add = function () {

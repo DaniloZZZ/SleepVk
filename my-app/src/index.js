@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import theme from './toolbox/theme.js'
-import ThemeProvider from 'react-toolbox/lib/ThemeProvider';
-import './toolbox/theme.css'
+//import theme from './toolbox/theme.js'
+//import ThemeProvider from 'react-toolbox/lib/ThemeProvider';
+//import './toolbox/theme.css'
 import SideBar from './App';
 import StatsPad from './Stats.js'
 import DataProvider from './Data.js'
@@ -34,7 +34,7 @@ var mainS={
 }
 function render(){
 ReactDOM.render(
-    <ThemeProvider theme={theme}>
+    <div>
         <div style={mainS} className="main">
         <div className="row">
             <div className="col-lg-3 col-md-4 col-sm-6">
@@ -45,7 +45,7 @@ ReactDOM.render(
             </div>
         </div>
         </div>
-    </ThemeProvider>
+    </div>
     
 , document.getElementById('root'));}
 registerServiceWorker();
